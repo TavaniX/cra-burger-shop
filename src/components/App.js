@@ -13,8 +13,18 @@ class App extends React.Component {
         order: {}
     };
 
+    // синхро с бд и загрузка стейта из бд
     componentDidMount() {
-        console.log('mount success')
+        const { params } = this.props.match;
+        this.ref = base.syncState(`${ params.restaurantId }/burger`, {
+            context: this,
+            state: 'burgers'
+        });
+    }
+    
+    // т.к. firebase работает через socket, нужно почистить
+    componentWillUnmount() {
+        base.removeBinding(this.ref);
     }
 
     addBurger = burger => {

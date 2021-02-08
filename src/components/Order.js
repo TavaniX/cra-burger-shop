@@ -46,7 +46,7 @@ class Order extends React.Component {
                 { total > 0 ? (
                     <Shipment total={ total } />
                 ) : (
-                    <div className='nothingSelecte'>
+                    <div className='nothingSelected'>
                         Выберите блюдо и добавьте к заказу
                     </div>
                 )}
