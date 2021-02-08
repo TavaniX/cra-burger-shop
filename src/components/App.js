@@ -16,16 +16,32 @@ class App extends React.Component {
     // синхро с бд и загрузка стейта из бд
     componentDidMount() {
         const { params } = this.props.match;
+
+        // считываем, что было записано в ls
+        const localStorageRef = localStorage.getItem(params.restaurantId);
+        
+        if(localStorageRef) {
+            this.setState({ order: JSON.parse(localStorageRef) });
+        };
+
         this.ref = base.syncState(`${ params.restaurantId }/burger`, {
             context: this,
             state: 'burgers'
         });
+    }
+
+    // при обновлении списка бургеров в компоненте Order
+    componentDidUpdate() {
+        const { params } = this.props.match;
+        localStorage.setItem(params.restaurantId, JSON.stringify(this.state.order));
     }
     
     // т.к. firebase работает через socket, нужно почистить
     componentWillUnmount() {
         base.removeBinding(this.ref);
     }
+
+
 
     addBurger = burger => {
         // 1. делаю копию объекта state
