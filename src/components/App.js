@@ -36,18 +36,25 @@ class App extends React.Component {
         localStorage.setItem(params.restaurantId, JSON.stringify(this.state.order));
     }
     
-    // т.к. firebase работает через socket, нужно почистить
+    // т.к. firebase работает через socket, нужно почистить 
     componentWillUnmount() {
         base.removeBinding(this.ref);
     }
 
-
-
     addBurger = burger => {
         // 1. делаю копию объекта state
         const burgers = { ...this.state.burgers };
-        // 2. добавляю новый бургер в копию объекста стей бургер
+        // 2. добавляю новый бургер в копию объекта стейт бургер
         burgers[`burger${Date.now()}`] = burger;
+        // 3. записываю обновленный объект burgers в стейт App
+        this.setState({ burgers });
+    };
+
+    updateBurger = (key, updatedBurger) => {
+        // 1. делаю копию объекта state
+        const burgers = { ...this.state.burgers };
+        // 2. обновляю нужный бургер
+        burgers[key] = updatedBurger;
         // 3. записываю обновленный объект burgers в стейт App
         this.setState({ burgers });
     };
@@ -86,7 +93,9 @@ class App extends React.Component {
                 <Order burgers={ this.state.burgers} order={ this.state.order } />
                 <MenuAdmin 
                     addBurger={ this.addBurger } 
-                    loadSampleBurgers= { this.loadSampleBurgers } 
+                    loadSampleBurgers= { this.loadSampleBurgers }
+                    burgers={ this.state.burgers }
+                    updateBurger={ this.updateBurger }
                 />
             </div>
         );
