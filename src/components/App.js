@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Header from './Header';
 import Order from './Order';
 import MenuAdmin from './MenuAdmin';
@@ -7,6 +8,9 @@ import Burger from './Burger';
 import base from '../base';
 
 class App extends React.Component {
+    static propTypes = {
+        match: PropTypes.object
+    };
 
     state = {
         burgers: {},
@@ -28,18 +32,18 @@ class App extends React.Component {
             context: this,
             state: 'burgers'
         });
-    }
+    };
 
     // при обновлении списка бургеров в компоненте Order
     componentDidUpdate() {
         const { params } = this.props.match;
         localStorage.setItem(params.restaurantId, JSON.stringify(this.state.order));
-    }
+    };
     
     // т.к. firebase работает через socket, нужно почистить 
     componentWillUnmount() {
         base.removeBinding(this.ref);
-    }
+    };
 
     addBurger = burger => {
         // 1. делаю копию объекта state
